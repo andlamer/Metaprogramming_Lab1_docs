@@ -1,0 +1,65 @@
+.main{
+    background: rgba(150, 147, 199, 0.5);
+    height:100%;
+}
+
+jumbotron{
+    height:100%;
+}
+
+.bckg-color{
+    background:rgba(0, 20, 109, 0.63);
+}
+
+.b-color{
+    background:rgba(214,219,219,0.63);
+}
+
+code{
+    color:rgb(38,50,56);
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+  }
+  .list-group.list-group-item-action {
+    background-color: rgba(46,35,199,0.4)
+  }
+  .list-group-mine .list-group-item {
+  background-color: rgba(80,62,243,0.24);
+  padding: 0;
+  overflow: hidden;
+}
+  .list-group.list-group-root {
+    padding: 0;
+    overflow: hidden;
+    color:rgb(30,30,30);
+    background:rgba(219,219,210,0.5);
+  }
+  
+  .list-group.list-group-root .list-group {
+    margin-bottom: 0;
+    color:rgb(30,30,30);
+  }
+  
+  .list-group.list-group-root .list-group-item {
+    border-radius: 0;
+    border-width: 1px 0 0 0;
+    color:rgb(30,30,30);
+  }
+  
+  .list-group.list-group-root > .list-group-item:first-child {
+    color:rgb(30,30,30);
+    border-top-width: 0;
+  }
+  
+  .list-group.list-group-root > .list-group > .list-group-item {
+    padding-left: 35px;
+    color:rgb(30,30,30);
+  }
+  
+  .list-group.list-group-root > .list-group > .list-group > .list-group-item {
+    padding-left: 55px;
+    color:rgb(30,30,30);
+  }
