@@ -747,7 +747,3 @@ def get_Doc_Imports(path, name, dir):
         sys.path.append(dir)
     get_doc = Get_Documentation(path, dir,"")
     return get_doc.get_Imports()
-
-
-ty = ("rfwrf", "rfqrf",
-      "rqqrf")
