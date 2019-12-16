@@ -1,6 +1,7 @@
 import os
 import PHTML_DOC_parser_util
 import PHTML_DOC_elements_parser
+import PHTML_DOC_parser_v2
 import datetime
 
 Generator_name = "PHTML_DOC"
@@ -31,7 +32,6 @@ def document_all_files(dir_name, destination, project_name, project_version, del
                     path = os.path.join(dirs, i)
                     direct = os.path.join(dirs)
                     subdir = direct.partition(dir_name)[2]
-                    subdir = subdir.replace('\\', '.')
                     name = i.split('.py')[0]
                     elements = generate_elements(path, direct, subdir, name, destination, project_name)
                     index_list.append_index_list(elements, i)
@@ -99,7 +99,8 @@ def generate_index_list(elements_list, folder_path, project_name):
 def generate_elements(path, dir, subdir, name, folder_path, project_name):
     """used for module
      html generation"""
-    elements = PHTML_DOC_elements_parser.getDocElements(path, name, dir)
+    # elements = PHTML_DOC_elements_parser.getDocElements(path, name, dir)
+    elements = PHTML_DOC_parser_v2.get_Doc_Elements(path, name, dir,subdir)
     f = open("PHTML_DOC_element_temp.html", 'r', encoding="utf-8")
     a = f.read()
     ModuleLine = "<h3>Module description</h3><br>"
@@ -153,7 +154,8 @@ def generate_elements(path, dir, subdir, name, folder_path, project_name):
             attribution_cards += "<h6>Value: </h6>" + item.value.replace('<',
                                                                          '&lt') + "<br><br>" + "<h6>Parent: </h6>" + item.parent + "<br><br>"
             attribution_cards += universal_card3
-    for item in PHTML_DOC_elements_parser.getDocImports(path, name, dir):
+    # for item in PHTML_DOC_elements_parser.getDocImports(path, name, dir):
+    for item in PHTML_DOC_parser_v2.get_Doc_Imports(path, name, dir):
         if item.name != "":
             if item.imp_as != "" and not item.name.startswith('from'):
                 names += "<li class=\"list-group-item\"><a href=#" + item.name + ">" + "import " + item.name + " as " + item.imp_as + "</a></li>\n"
@@ -199,11 +201,13 @@ def generate_elements(path, dir, subdir, name, folder_path, project_name):
     a = a.replace("<h3>Function details</h3>", function_cards)
     a = a.replace("Project_Name", project_name)
     a = a.replace("%ELEMENTNAME%", module_name)
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    PHTML_DOC_parser_util.copy_styles_to_folder(folder_path)
+    print(subdir)
+    if not os.path.exists(folder_path+subdir+'/'):
+        os.makedirs(folder_path+subdir+'/')
+    PHTML_DOC_parser_util.copy_styles_to_folder(folder_path+subdir+'/')
+    print(folder_path+subdir+'/')
     if subdir != '':
-        result = open(folder_path + subdir + '.' + module_name + ".html", "w+", encoding="utf-8")
+        result = open(folder_path + subdir + '/' + module_name + ".html", "w+", encoding="utf-8")
     else:
         result = open(folder_path + module_name + ".html", "w+", encoding="utf-8")
     result.write(a)
@@ -231,6 +235,7 @@ def generate_tree_html(root, all_bool, name, folder_path):
     a = a.replace('%PRNAME%', name)
     insertion = ""
     level = root.count("\\")
+
     if all_bool == 0:
         tree = os.walk(root)
         count = 0
@@ -252,16 +257,16 @@ def generate_tree_html(root, all_bool, name, folder_path):
                             count += 1
                             if subdir != "":
                                 insertion += (
-                                        "<a  href = \"" + folder_path + subdir + "." + file.split('.py')[0]
+                                        "<a  href = \"" + folder_path + subdir + "/" + file.split('.py')[0]
                                         + ".html\" class =\"list-group-item list-group-item-action "
-                                          "list-group-item-primary\">" + "<pre>" + (
-                                                lvl + 1) * "      " + file + "</pre>" + "</a>")
+                                          "list-group-item-primary\">" + "<pre><b>" + (
+                                                lvl + 1) * "      " + file + "</b></pre>" + "</a>")
                             else:
                                 insertion += (
                                         "<a  href = \"" + folder_path + "/" + file.split('.py')[0]
                                         + ".html\" class =\"list-group-item list-group-item-action "
-                                          "list-group-item-primary\">" + "<pre>" + (
-                                                lvl + 1) * "  " + file + "</pre>" + "</a>")
+                                          "list-group-item-primary\">" + "<pre><b>" + (
+                                                lvl + 1) * "  " + file + "</b></pre>" + "</a>")
                 else:
                     insertion += "<a class =\"list-group-item list-group-item-secondary\" >" + "<pre>" + lvl * "      " + (
                         os.path.relpath(item[0], start=root) if item[0] != root else item[0]) + "</pre>" + "</a>"
@@ -284,5 +289,6 @@ def generate_tree_html(root, all_bool, name, folder_path):
     index = a.find(start)
 
     a = a[:index + len(start)] + insertion + a[index + len(start):]
+    PHTML_DOC_parser_util.copy_styles_to_folder(folder_path)
     result = open(folder_path + "tree.html", "w+")
     result.write(a)
