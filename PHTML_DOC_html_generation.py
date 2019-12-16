@@ -32,8 +32,6 @@ def document_all_files(dir_name, destination, project_name, project_version, del
                     path = os.path.join(dirs, i)
                     direct = os.path.join(dirs)
                     subdir = direct.partition(dir_name)[2]
-                    subdir = subdir.replace('\\', '.')
-                    subdir = subdir.replace("/", '.')
                     name = i.split('.py')[0]
                     elements = generate_elements(path, direct, subdir, name, destination, project_name)
                     index_list.append_index_list(elements, i)
@@ -203,11 +201,13 @@ def generate_elements(path, dir, subdir, name, folder_path, project_name):
     a = a.replace("<h3>Function details</h3>", function_cards)
     a = a.replace("Project_Name", project_name)
     a = a.replace("%ELEMENTNAME%", module_name)
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    PHTML_DOC_parser_util.copy_styles_to_folder(folder_path)
+    print(subdir)
+    if not os.path.exists(folder_path+subdir+'/'):
+        os.makedirs(folder_path+subdir+'/')
+    PHTML_DOC_parser_util.copy_styles_to_folder(folder_path+subdir+'/')
+    print(folder_path+subdir+'/')
     if subdir != '':
-        result = open(folder_path + subdir + '.' + module_name + ".html", "w+", encoding="utf-8")
+        result = open(folder_path + subdir + '/' + module_name + ".html", "w+", encoding="utf-8")
     else:
         result = open(folder_path + module_name + ".html", "w+", encoding="utf-8")
     result.write(a)
@@ -257,7 +257,7 @@ def generate_tree_html(root, all_bool, name, folder_path):
                             count += 1
                             if subdir != "":
                                 insertion += (
-                                        "<a  href = \"" + folder_path + subdir + "." + file.split('.py')[0]
+                                        "<a  href = \"" + folder_path + subdir + "/" + file.split('.py')[0]
                                         + ".html\" class =\"list-group-item list-group-item-action "
                                           "list-group-item-primary\">" + "<pre><b>" + (
                                                 lvl + 1) * "      " + file + "</b></pre>" + "</a>")
@@ -289,5 +289,6 @@ def generate_tree_html(root, all_bool, name, folder_path):
     index = a.find(start)
 
     a = a[:index + len(start)] + insertion + a[index + len(start):]
+    PHTML_DOC_parser_util.copy_styles_to_folder(folder_path)
     result = open(folder_path + "tree.html", "w+")
     result.write(a)
