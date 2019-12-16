@@ -33,7 +33,7 @@ def document_all_files(dir_name, destination, project_name, project_version, del
                     direct = os.path.join(dirs)
                     subdir = direct.partition(dir_name)[2]
                     subdir = subdir.replace('\\', '.')
-                    subdir = subdir.replace("/",'.')
+                    subdir = subdir.replace("/", '.')
                     name = i.split('.py')[0]
                     elements = generate_elements(path, direct, subdir, name, destination, project_name)
                     index_list.append_index_list(elements, i)

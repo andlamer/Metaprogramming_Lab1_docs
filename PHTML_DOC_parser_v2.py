@@ -149,7 +149,7 @@ class Get_Documentation():
                             lines[next_line].startswith("\"\"\"")):
                         class_line = False
                     start += 1
-                elif lines[start].find("=") != -1 and lines[start].partition("=")[0].find("#") == -1 and \
+                elif lines[start].find("<=") == -1 and lines[start].find(">=") == -1 and lines[start].find("==") == -1 and lines[start].find("=") != -1 and lines[start].partition("=")[0].find("#") == -1 and \
                         lines[start].partition("=")[0].find(".") == -1 and lines[start].partition("=")[0].find(
                     "(") == -1 and indentsize(lines[start]) == indent and \
                         lines[start][(lines[start].find("=") - 1)] not in ("-", "+", "=", "!", "%", "/", "\\"):
@@ -162,9 +162,14 @@ class Get_Documentation():
                     temp.documentation = None
                     temp.signature = None
                     val = ""
-                    if lines[start].partition("=")[2].find("[") != -1:
+                    if  lines[start].partition("=")[2].lstrip().startswith("["):
                         a = lines[start].partition("=")[2]
-                        if a.rstrip("\n").rstrip().endswith("]"):
+                        if a.find("#") == -1 and a.rstrip("\n").rstrip().endswith("]"):
+                            for i in range(0, len(a)):
+                                val += a[i]
+                            start += 1
+                        elif a.find("#") != -1 and a[:a.find("#")].rstrip().endswith("]"):
+                            a = a[:a.find("#")]
                             for i in range(0, len(a)):
                                 val += a[i]
                             start += 1
@@ -182,9 +187,14 @@ class Get_Documentation():
                                 for i in range(0, len(l)):
                                     val += l[i]
                                 start += 1
-                    elif lines[start].partition("=")[2].find("{") != -1:
+                    elif  lines[start].partition("=")[2].lstrip().startswith("{"):
                         a = lines[start].partition("=")[2]
-                        if a.rstrip("\n").rstrip().endswith("}"):
+                        if a.find("#") == -1 and a.rstrip("\n").rstrip().endswith("}"):
+                            for i in range(0, len(a)):
+                                val += a[i]
+                            start += 1
+                        elif a.find("#") != -1 and a[:a.find("#")].rstrip().endswith("}"):
+                            a = a[:a.find("#")]
                             for i in range(0, len(a)):
                                 val += a[i]
                             start += 1
@@ -202,9 +212,14 @@ class Get_Documentation():
                                 for i in range(0, len(l)):
                                     val += l[i]
                                 start += 1
-                    elif lines[start].partition("=")[2].find("(") != -1:
+                    elif  lines[start].partition("=")[2].lstrip().startswith("("):
                         a = lines[start].partition("=")[2]
-                        if a.rstrip("\n").rstrip().endswith(")"):
+                        if a.find("#") == -1 and a.rstrip("\n").rstrip().endswith(")"):
+                            for i in range(0, len(a)):
+                                val += a[i]
+                            start += 1
+                        elif a.find("#") != -1 and a[:a.find("#")].rstrip().endswith(")"):
+                            a = a[:a.find("#")]
                             for i in range(0, len(a)):
                                 val += a[i]
                             start += 1
@@ -284,7 +299,7 @@ class Get_Documentation():
             start = 0
             i = 0
             while start < len(lines):
-                if lines[start].find("=") != -1 and lines[start].partition("=")[0].find("#") == -1 and \
+                if lines[start].find("<=") == -1 and lines[start].find(">=") == -1 and lines[start].find("==") == -1 and lines[start].find("=") != -1 and lines[start].partition("=")[0].find("#") == -1 and \
                         lines[start].partition("=")[0].find(".") == -1 and lines[start].partition("=")[0].find(
                     "(") == -1 and indentsize(lines[start]) == indent and \
                         lines[start][(lines[start].find("=") - 1)] not in ("-", "+", "=", "!", "%", "/", "\\") and \
@@ -299,9 +314,14 @@ class Get_Documentation():
                     temp.documentation = None
                     temp.signature = None
                     val = ""
-                    if lines[start].partition("=")[2].find("[") != -1:
+                    if lines[start].partition("=")[2].lstrip().startswith("["):
                         a = lines[start].partition("=")[2]
-                        if a.rstrip("\n").rstrip().endswith("]"):
+                        if a.find("#") == -1 and a.rstrip("\n").rstrip().endswith("]"):
+                            for i in range(0, len(a)):
+                                val += a[i]
+                            start += 1
+                        elif a.find("#") != -1 and a[:a.find("#")].rstrip().endswith("]"):
+                            a = a[:a.find("#")]
                             for i in range(0, len(a)):
                                 val += a[i]
                             start += 1
@@ -319,9 +339,14 @@ class Get_Documentation():
                                 for i in range(0, len(l)):
                                     val += l[i]
                                 start += 1
-                    elif lines[start].partition("=")[2].find("{") != -1:
+                    elif lines[start].partition("=")[2].strip().startswith("{"):
                         a = lines[start].partition("=")[2]
-                        if a.rstrip("\n").rstrip().endswith("}"):
+                        if a.find("#") == -1 and a.rstrip("\n").rstrip().endswith("}"):
+                            for i in range(0, len(a)):
+                                val += a[i]
+                            start += 1
+                        elif a.find("#") != -1 and a[:a.find("#")].rstrip().endswith("}"):
+                            a = a[:a.find("#")]
                             for i in range(0, len(a)):
                                 val += a[i]
                             start += 1
@@ -339,9 +364,14 @@ class Get_Documentation():
                                 for i in range(0, len(l)):
                                     val += l[i]
                                 start += 1
-                    elif lines[start].partition("=")[2].find("(") != -1:
+                    elif lines[start].partition("=")[2].lstrip().startswith("("):
                         a = lines[start].partition("=")[2]
-                        if a.rstrip("\n").rstrip().endswith(")"):
+                        if a.find("#") and a.rstrip("\n").rstrip().endswith(")"):
+                            for i in range(0, len(a)):
+                                val += a[i]
+                            start += 1
+                        elif a.find("#") != -1 and a[:a.find("#")].rstrip().endswith(")"):
+                            a = a[:a.find("#")]
                             for i in range(0, len(a)):
                                 val += a[i]
                             start += 1
